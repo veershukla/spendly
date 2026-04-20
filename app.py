@@ -1,7 +1,12 @@
-from flask import Flask, render_template
+import os
+
+from flask import Flask, render_template, request, session, redirect, url_for
+from werkzeug.security import generate_password_hash
+
 from database.db import get_db, init_db, seed_db
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-prod")
 
 with app.app_context():
     init_db()
@@ -17,9 +22,42 @@ def landing():
     return render_template("landing.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    if request.method == "GET":
+        return render_template("register.html")
+
+    name             = request.form.get("name", "").strip()
+    email            = request.form.get("email", "").strip()
+    password         = request.form.get("password", "")
+    confirm_password = request.form.get("confirm_password", "")
+
+    if not name:
+        return render_template("register.html", error="Name is required.")
+    if not email:
+        return render_template("register.html", error="Email is required.")
+    if len(password) < 8:
+        return render_template("register.html", error="Password must be at least 8 characters.")
+    if password != confirm_password:
+        return render_template("register.html", error="Passwords do not match.")
+
+    conn = get_db()
+    existing = conn.execute("SELECT id FROM users WHERE email = ?", (email,)).fetchone()
+    if existing:
+        conn.close()
+        return render_template("register.html", error="An account with that email already exists.")
+
+    conn.execute(
+        "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+        (name, email, generate_password_hash(password)),
+    )
+    conn.commit()
+    user = conn.execute("SELECT id, name FROM users WHERE email = ?", (email,)).fetchone()
+    conn.close()
+
+    session["user_id"]   = user["id"]
+    session["user_name"] = user["name"]
+    return redirect(url_for("login"))
 
 
 @app.route("/login")
