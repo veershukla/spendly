@@ -575,3 +575,152 @@ a { color: inherit; text-decoration: none; }
     .nav-links a:not(.nav-cta) { display: none; }
     .hero { padding: 3rem 1rem 2rem; }
 }
+
+/* ------------------------------------------------------------------ */
+/* Mock stats (global — needed on profile and future pages)            */
+/* ------------------------------------------------------------------ */
+
+.mock-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.mock-stat        { display: flex; flex-direction: column; gap: 0.2rem; }
+.mock-stat-label  { font-size: 0.72rem; color: var(--ink-muted); font-weight: 500; }
+.mock-stat-value  { font-family: var(--font-display); font-size: 1.4rem; color: var(--ink); line-height: 1.1; }
+.mock-stat-plain  { font-family: var(--font-display); }
+.mock-stat-sub    { font-size: 0.72rem; color: var(--ink-faint); }
+
+/* ------------------------------------------------------------------ */
+/* Profile page                                                        */
+/* ------------------------------------------------------------------ */
+
+.profile-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.profile-heading  { margin-bottom: 0.5rem; }
+
+.profile-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+}
+
+.profile-subtitle { font-size: 0.9rem; color: var(--ink-muted); }
+
+.profile-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 2rem;
+}
+
+.profile-section-label { margin-bottom: 1.25rem; }
+
+/* Avatar */
+.profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--paper-card);
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+}
+
+/* User info card */
+.profile-user-card  { display: flex; align-items: center; gap: 1.5rem; }
+.profile-user-info  { display: flex; flex-direction: column; gap: 0.25rem; }
+.profile-user-name  { font-family: var(--font-display); font-size: 1.4rem; color: var(--ink); line-height: 1.2; }
+.profile-user-email { font-size: 0.9rem; color: var(--ink-muted); }
+.profile-user-since { font-size: 0.85rem; color: var(--ink-faint); margin-top: 0.25rem; }
+.profile-user-since .mock-label { margin-right: 0.35rem; }
+
+/* Transaction table */
+.profile-table-wrap { overflow-x: auto; }
+
+.profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.profile-table thead th {
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0 0.75rem 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.profile-table tbody tr         { border-bottom: 1px solid var(--border-soft); }
+.profile-table tbody tr:last-child { border-bottom: none; }
+
+.profile-table tbody td {
+    padding: 0.85rem 0.75rem 0.85rem 0;
+    color: var(--ink-soft);
+    vertical-align: middle;
+}
+
+.profile-table-date {
+    color: var(--ink-faint);
+    white-space: nowrap;
+    font-size: 0.82rem;
+}
+
+.profile-table-amount {
+    text-align: right;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+/* Category badges */
+.category-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.badge-food          { background: var(--accent-2-light); color: var(--accent-2);  }
+.badge-transport     { background: var(--accent-light);   color: var(--accent);    }
+.badge-bills         { background: var(--danger-light);   color: var(--danger);    }
+.badge-health        { background: var(--accent-light);   color: var(--accent);    }
+.badge-entertainment { background: var(--accent-2-light); color: var(--accent-2);  }
+.badge-shopping      { background: var(--border-soft);    color: var(--ink-soft);  }
+.badge-other         { background: var(--paper-warm);     color: var(--ink-muted); }
+
+/* Category bar row — amount column right-aligned */
+.profile-bar-row .mock-amt { justify-self: end; }
+
+/* Profile responsive */
+@media (max-width: 600px) {
+    .profile-user-card { flex-direction: column; align-items: flex-start; }
+    .profile-card      { padding: 1.25rem 1rem; }
+    .profile-page .mock-stats { grid-template-columns: 1fr; gap: 1.25rem; }
+}
