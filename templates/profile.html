@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}My Profile — Spendly{% endblock %}
+
+{% block content %}
+<section class="profile-page">
+
+    <div class="profile-heading">
+        <h1 class="profile-title">My Profile</h1>
+        <p class="profile-subtitle">Your account overview and spending summary</p>
+    </div>
+
+    <!-- User info card -->
+    <div class="profile-card profile-user-card">
+        <div class="profile-avatar">{{ user.initials }}</div>
+        <div class="profile-user-info">
+            <h2 class="profile-user-name">{{ user.name }}</h2>
+            <p class="profile-user-email">{{ user.email }}</p>
+            <p class="profile-user-since">
+                <span class="mock-label">Member since</span>{{ user.member_since }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="profile-card">
+        <p class="mock-label profile-section-label">April 2026 at a glance</p>
+        <div class="mock-stats">
+            <div class="mock-stat">
+                <span class="mock-stat-label">Total spent</span>
+                <span class="mock-stat-value">₹{{ "%.0f"|format(summary.total_spent) }}</span>
+                <span class="mock-stat-sub">this month</span>
+            </div>
+            <div class="mock-stat">
+                <span class="mock-stat-label">Transactions</span>
+                <span class="mock-stat-value mock-stat-plain">{{ summary.transaction_count }}</span>
+                <span class="mock-stat-sub">logged</span>
+            </div>
+            <div class="mock-stat">
+                <span class="mock-stat-label">Top category</span>
+                <span class="mock-stat-value mock-stat-plain">{{ summary.top_category }}</span>
+                <span class="mock-stat-sub mock-stat-up">₹{{ "%.0f"|format(summary.top_amount) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction history -->
+    <div class="profile-card">
+        <p class="mock-label profile-section-label">Transaction history</p>
+        <div class="profile-table-wrap">
+            <table class="profile-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th class="profile-table-amount">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tx in transactions %}
+                    <tr>
+                        <td class="profile-table-date">{{ tx.date }}</td>
+                        <td>{{ tx.description }}</td>
+                        <td>
+                            <span class="category-badge badge-{{ tx.category | lower }}">
+                                {{ tx.category }}
+                            </span>
+                        </td>
+                        <td class="profile-table-amount">₹{{ "%.0f"|format(tx.amount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Category breakdown -->
+    <div class="profile-card">
+        <p class="mock-label profile-section-label">Spending by category</p>
+        <div class="mock-bars">
+            {% for cat in categories %}
+            <div class="mock-bar-row profile-bar-row">
+                <span class="mock-cat">{{ cat.name }}</span>
+                <div class="mock-bar-track">
+                    <div class="mock-bar" style="width: {{ cat.pct }}%"></div>
+                </div>
+                <span class="mock-amt">₹{{ "%.0f"|format(cat.total) }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</section>
+{% endblock %}
