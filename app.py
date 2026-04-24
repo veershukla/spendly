@@ -4,6 +4,12 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database.db import get_db, init_db, seed_db
+from database.queries import (
+    get_user_by_id,
+    get_summary_stats,
+    get_recent_transactions,
+    get_category_breakdown,
+)
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-prod")
@@ -114,37 +120,16 @@ def profile():
     if not session.get("user_id"):
         return redirect(url_for("login"))
 
-    user = {
-        "name": "Demo User",
-        "email": "demo@spendly.com",
-        "member_since": "2026-04-20",
-        "initials": "DU",
-    }
-    summary = {
-        "total_spent": 6165.00,
-        "transaction_count": 8,
-        "top_category": "Shopping",
-        "top_amount": 2200.00,
-    }
-    transactions = [
-        {"date": "2026-04-01", "description": "Grocery run",       "category": "Food",          "amount": 450.00},
-        {"date": "2026-04-02", "description": "Metro card top-up", "category": "Transport",     "amount": 120.00},
-        {"date": "2026-04-04", "description": "Electricity bill",  "category": "Bills",         "amount": 1800.00},
-        {"date": "2026-04-06", "description": "Pharmacy",          "category": "Health",        "amount": 650.00},
-        {"date": "2026-04-07", "description": "Movie tickets",     "category": "Entertainment", "amount": 300.00},
-        {"date": "2026-04-09", "description": "Clothes",           "category": "Shopping",      "amount": 2200.00},
-        {"date": "2026-04-10", "description": "Miscellaneous",     "category": "Other",         "amount": 85.00},
-        {"date": "2026-04-12", "description": "Restaurant dinner", "category": "Food",          "amount": 560.00},
-    ]
-    categories = [
-        {"name": "Shopping",      "total": 2200.00, "pct": 36},
-        {"name": "Bills",         "total": 1800.00, "pct": 29},
-        {"name": "Food",          "total": 1010.00, "pct": 16},
-        {"name": "Health",        "total": 650.00,  "pct": 11},
-        {"name": "Entertainment", "total": 300.00,  "pct": 5},
-        {"name": "Transport",     "total": 120.00,  "pct": 2},
-        {"name": "Other",         "total": 85.00,   "pct": 1},
-    ]
+    uid  = session["user_id"]
+    user = get_user_by_id(uid)
+    if user is None:
+        session.clear()
+        return redirect(url_for("login"))
+
+    summary      = get_summary_stats(uid)
+    transactions = get_recent_transactions(uid)
+    categories   = get_category_breakdown(uid)
+
     return render_template("profile.html", user=user, summary=summary,
                            transactions=transactions, categories=categories)
 
