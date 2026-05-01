@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from flask import Flask, render_template, request, session, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -126,12 +127,35 @@ def profile():
         session.clear()
         return redirect(url_for("login"))
 
-    summary      = get_summary_stats(uid)
-    transactions = get_recent_transactions(uid)
-    categories   = get_category_breakdown(uid)
+    date_from = request.args.get("date_from", "").strip()
+    date_to   = request.args.get("date_to",   "").strip()
 
-    return render_template("profile.html", user=user, summary=summary,
-                           transactions=transactions, categories=categories)
+    if date_from and date_to:
+        try:
+            from_dt = datetime.strptime(date_from, "%Y-%m-%d")
+            to_dt   = datetime.strptime(date_to,   "%Y-%m-%d")
+            filter_label = (
+                f"{from_dt.strftime('%d %b')} – "
+                f"{to_dt.strftime('%d %b')} {to_dt.strftime('%Y')}"
+            )
+        except ValueError:
+            filter_label = "All time"
+            date_from = date_to = ""
+    else:
+        filter_label = "All time"
+        date_from = date_to = ""
+
+    summary      = get_summary_stats(uid, date_from, date_to)
+    transactions = get_recent_transactions(uid, date_from=date_from, date_to=date_to)
+    categories   = get_category_breakdown(uid, date_from, date_to)
+
+    return render_template(
+        "profile.html",
+        user=user, summary=summary,
+        transactions=transactions, categories=categories,
+        date_from=date_from, date_to=date_to,
+        filter_label=filter_label,
+    )
 
 
 @app.route("/expenses/add")
@@ -150,4 +174,4 @@ def delete_expense(id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=os.environ.get("FLASK_DEBUG", "0") == "1", port=5001)

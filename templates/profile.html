@@ -21,14 +21,26 @@
         </div>
     </div>
 
+    <!-- Date filter -->
+    <div class="profile-card profile-filter-bar">
+        <form method="GET" action="{{ url_for('profile') }}" class="filter-form">
+            <label for="date_from">From</label>
+            <input type="date" id="date_from" name="date_from" value="{{ date_from }}">
+            <label for="date_to">To</label>
+            <input type="date" id="date_to" name="date_to" value="{{ date_to }}">
+            <button type="submit" class="btn btn-primary">Apply</button>
+            <a href="{{ url_for('profile') }}" class="btn btn-secondary">Clear</a>
+        </form>
+    </div>
+
     <!-- Summary stats -->
     <div class="profile-card">
-        <p class="mock-label profile-section-label">April 2026 at a glance</p>
+        <p class="mock-label profile-section-label">{{ filter_label }} at a glance</p>
         <div class="mock-stats">
             <div class="mock-stat">
                 <span class="mock-stat-label">Total spent</span>
                 <span class="mock-stat-value">₹{{ "%.0f"|format(summary.total_spent) }}</span>
-                <span class="mock-stat-sub">this month</span>
+                <span class="mock-stat-sub">{{ "in range" if date_from else "overall" }}</span>
             </div>
             <div class="mock-stat">
                 <span class="mock-stat-label">Transactions</span>
