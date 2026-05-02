@@ -37,6 +37,17 @@ def init_db():
     conn.close()
 
 
+def insert_expense(user_id, amount, category, expense_date, description):
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO expenses (user_id, amount, category, date, description)"
+        " VALUES (?, ?, ?, ?, ?)",
+        (user_id, amount, category, expense_date, description or None),
+    )
+    conn.commit()
+    conn.close()
+
+
 def seed_db():
     conn = get_db()
     row = conn.execute("SELECT COUNT(*) FROM users").fetchone()
