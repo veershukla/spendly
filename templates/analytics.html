@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Analytics — Spendly{% endblock %}
+
+{% block content %}
+<section class="analytics-page">
+
+    <div class="analytics-hero">
+        <div class="analytics-hero-inner">
+            <span class="hero-badge">Coming Soon</span>
+            <h1 class="analytics-title">Understand your <em>spending patterns</em></h1>
+            <p class="analytics-subtitle">
+                Deep-dive charts, trend lines, and category breakdowns — everything you need
+                to make sense of where your money goes, month after month.
+            </p>
+            <a href="{{ url_for('profile') }}" class="btn-ghost">Back to Profile</a>
+        </div>
+
+        <div class="analytics-preview-card">
+            <p class="mock-label">Monthly Overview</p>
+            <div class="analytics-chart-mock">
+                <div class="chart-bar-group">
+                    <div class="chart-bar" style="height: 60%;"></div>
+                    <span class="chart-bar-label">Jan</span>
+                </div>
+                <div class="chart-bar-group">
+                    <div class="chart-bar" style="height: 80%;"></div>
+                    <span class="chart-bar-label">Feb</span>
+                </div>
+                <div class="chart-bar-group">
+                    <div class="chart-bar chart-bar-accent2" style="height: 95%;"></div>
+                    <span class="chart-bar-label">Mar</span>
+                </div>
+                <div class="chart-bar-group">
+                    <div class="chart-bar" style="height: 50%;"></div>
+                    <span class="chart-bar-label">Apr</span>
+                </div>
+                <div class="chart-bar-group">
+                    <div class="chart-bar" style="height: 70%;"></div>
+                    <span class="chart-bar-label">May</span>
+                </div>
+                <div class="chart-bar-group chart-bar-group-faded">
+                    <div class="chart-bar chart-bar-faded" style="height: 40%;"></div>
+                    <span class="chart-bar-label">Jun</span>
+                </div>
+            </div>
+            <div class="analytics-preview-footer">
+                <span class="mock-label">Avg. monthly spend</span>
+                <span class="analytics-preview-amount">₹18,450</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="analytics-features">
+        <p class="analytics-features-label mock-label">What's coming</p>
+        <div class="analytics-features-grid">
+            <div class="analytics-feature-card">
+                <div class="analytics-feature-icon">▲</div>
+                <h3 class="analytics-feature-title">Trend Analysis</h3>
+                <p class="analytics-feature-body">
+                    See how your spending evolves over weeks and months.
+                    Spot patterns before they become problems.
+                </p>
+            </div>
+            <div class="analytics-feature-card">
+                <div class="analytics-feature-icon">◉</div>
+                <h3 class="analytics-feature-title">Category Breakdown</h3>
+                <p class="analytics-feature-body">
+                    Interactive charts that show exactly which categories
+                    are eating into your budget.
+                </p>
+            </div>
+            <div class="analytics-feature-card">
+                <div class="analytics-feature-icon">◈</div>
+                <h3 class="analytics-feature-title">Smart Insights</h3>
+                <p class="analytics-feature-body">
+                    Personalised tips based on your spending behaviour —
+                    no generic advice, just what applies to you.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

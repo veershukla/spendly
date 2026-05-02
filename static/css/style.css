@@ -113,6 +113,7 @@ a { color: inherit; text-decoration: none; }
 
 .nav-cta:hover { background: var(--accent) !important; }
 .nav-user { color: var(--ink-muted); font-weight: 500; }
+.nav-link-active { color: var(--ink) !important; font-weight: 600; }
 
 /* ------------------------------------------------------------------ */
 /* Main                                                                */
@@ -723,4 +724,154 @@ a { color: inherit; text-decoration: none; }
     .profile-user-card { flex-direction: column; align-items: flex-start; }
     .profile-card      { padding: 1.25rem 1rem; }
     .profile-page .mock-stats { grid-template-columns: 1fr; gap: 1.25rem; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Analytics page                                                      */
+/* ------------------------------------------------------------------ */
+
+.analytics-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+}
+
+.analytics-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 5rem;
+}
+
+.analytics-hero-inner { display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
+
+.analytics-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-top: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.analytics-title em { font-style: italic; color: var(--accent); }
+
+.analytics-subtitle {
+    font-size: 1rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 420px;
+}
+
+/* Preview card */
+.analytics-preview-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+}
+
+.analytics-chart-mock {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    height: 140px;
+    margin: 1.25rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.chart-bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    flex: 1;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.chart-bar {
+    width: 100%;
+    background: var(--accent);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    transition: height 0.4s ease;
+}
+
+.chart-bar-accent2 { background: var(--accent-2); }
+.chart-bar-faded   { background: var(--border); }
+
+.chart-bar-label {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    font-weight: 500;
+}
+
+.analytics-preview-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 1rem;
+}
+
+.analytics-preview-amount {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--ink);
+}
+
+/* Features strip */
+.analytics-features {
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2rem;
+}
+
+.analytics-features-label { margin-bottom: 1.5rem; }
+
+.analytics-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.analytics-feature-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+}
+
+.analytics-feature-icon {
+    font-size: 1.4rem;
+    color: var(--accent);
+    margin-bottom: 0.875rem;
+}
+
+.analytics-feature-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+}
+
+.analytics-feature-body {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+}
+
+/* Analytics responsive */
+@media (max-width: 900px) {
+    .analytics-hero       { grid-template-columns: 1fr; gap: 2.5rem; }
+    .analytics-features-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+    .analytics-page { padding: 2.5rem 1rem 4rem; }
 }
