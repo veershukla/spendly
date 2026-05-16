@@ -2,7 +2,7 @@ import os
 import re
 from datetime import datetime
 
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database.db import get_db, init_db, seed_db, insert_expense
@@ -11,6 +11,8 @@ from database.queries import (
     get_summary_stats,
     get_recent_transactions,
     get_category_breakdown,
+    get_expense_by_id,
+    update_expense,
 )
 
 app = Flask(__name__)
@@ -232,9 +234,73 @@ def add_expense():
     return redirect(url_for("profile"))
 
 
-@app.route("/expenses/<int:id>/edit")
+@app.route("/expenses/<int:id>/edit", methods=["GET", "POST"])
 def edit_expense(id):
-    return "Edit expense — coming in Step 8"
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    expense = get_expense_by_id(id, session["user_id"])
+    if expense is None:
+        abort(404)
+
+    if request.method == "GET":
+        return render_template(
+            "edit_expense.html",
+            expense=expense,
+            categories=ALLOWED_CATEGORIES,
+            amount=expense["amount"],
+            category=expense["category"],
+            date=expense["date"],
+            description=expense["description"] or "",
+        )
+
+    amount_raw   = request.form.get("amount",      "").strip()
+    category     = request.form.get("category",    "")
+    expense_date = request.form.get("date",         "").strip()
+    description  = request.form.get("description", "").strip()
+
+    def redisplay(error):
+        return render_template(
+            "edit_expense.html",
+            expense=expense,
+            categories=ALLOWED_CATEGORIES,
+            error=error,
+            amount=amount_raw,
+            category=category,
+            date=expense_date,
+            description=description,
+        )
+
+    if not amount_raw:
+        return redisplay("Amount is required.")
+    try:
+        amount = float(amount_raw)
+    except ValueError:
+        return redisplay("Amount must be a valid number.")
+    if amount <= 0:
+        return redisplay("Amount must be greater than zero.")
+    if not re.fullmatch(r'\d+(\.\d{1,2})?', amount_raw):
+        return redisplay("Amount must be a plain number with up to 2 decimal places.")
+    if amount > 10_000_000:
+        return redisplay("Amount must be less than ₹1,00,00,000.")
+
+    if not category:
+        return redisplay("Category is required.")
+    if category not in ALLOWED_CATEGORIES:
+        return redisplay("Please select a valid category.")
+
+    if not expense_date:
+        return redisplay("Date is required.")
+    try:
+        datetime.strptime(expense_date, "%Y-%m-%d")
+    except ValueError:
+        return redisplay("Date must be a valid date (YYYY-MM-DD).")
+
+    if len(description) > 200:
+        return redisplay("Description must be 200 characters or fewer.")
+
+    update_expense(id, session["user_id"], amount, category, expense_date, description or None)
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/delete")
