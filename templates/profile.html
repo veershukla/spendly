@@ -66,6 +66,7 @@
                         <th>Description</th>
                         <th>Category</th>
                         <th class="profile-table-amount">Amount</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,6 +80,9 @@
                             </span>
                         </td>
                         <td class="profile-table-amount">₹{{ "%.0f"|format(tx.amount) }}</td>
+                        <td>
+                            <a href="/expenses/{{ tx.id }}/edit" class="btn btn-secondary">Edit</a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
